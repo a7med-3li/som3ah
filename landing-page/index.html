@@ -336,11 +336,12 @@
   .form-success{display:none;color:var(--green);font-weight:600;font-size:14.5px;margin-top:6px;}
 
   /* FOOTER */
-  footer{border-top:1px solid var(--border-soft);padding:42px 0;}
+  footer{border-top:1px solid var(--border-soft);padding:32px 0 36px;}
   .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
   .footer-row .logo{font-size:16px;}
   .footer-links{display:flex;gap:24px;font-size:13.5px;color:var(--text-dim);}
   .footer-links a:hover{color:var(--text-muted);}
+  .footer-legal{margin-top:22px;padding-top:22px;border-top:1px solid var(--border-soft);font-size:13px;color:var(--text-dim);}
 
   a:focus-visible, button:focus-visible, input:focus-visible{
     outline:2px solid var(--green);outline-offset:2px;
@@ -658,20 +659,29 @@
         </div>
       </form>
       <p class="form-success" id="formSuccess">Thanks — you're on the list. We'll be in touch.</p>
-      <p class="form-note">This page is for gathering feedback only — no account is created and no charge is made.</p>
+      <p class="form-note">This page is for gathering feedback only — no account is created and no charge is made. See our <a href="/privacy.html" style="color:var(--text-muted);text-decoration:underline;">Privacy Policy</a>.</p>
     </div>
   </div>
 </section>
 
 <footer>
-  <div class="wrap footer-row">
-    <div class="logo"><div class="logo-mark">س</div>Som3ah</div>
-    <div class="footer-links">
-      <a href="#features">Features</a>
-      <a href="#how">How it works</a>
-      <a href="#agency">For agencies</a>
+  <div class="wrap">
+    <div class="footer-row">
+      <div class="logo"><div class="logo-mark">س</div>Som3ah</div>
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#agency">For agencies</a>
+      </div>
     </div>
-    <div class="footer-links"><span>© 2026 Som3ah. Made in Egypt.</span></div>
+    <div class="footer-row footer-legal">
+      <span>© 2026 Som3ah. Made in Egypt.</span>
+      <div class="footer-links">
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="mailto:support@som3ah.tech">Contact us</a>
+      </div>
+    </div>
   </div>
 </footer>
 
