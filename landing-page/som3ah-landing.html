@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Som3ah — Turn every happy customer into a 5-star review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0c0a;
+    --surface-1:#10130f;
+    --surface-2:#171b15;
+    --surface-3:#1e231b;
+    --border:#262b22;
+    --border-soft:#1a1f17;
+    --text:#f1efe4;
+    --text-muted:#9aa294;
+    --text-dim:#6b7267;
+    --green:#2fbf71;
+    --green-soft:rgba(47,191,113,0.13);
+    --green-dim:#1d7a49;
+    --gold:#cba135;
+    --gold-soft:rgba(203,161,53,0.14);
+    --radius:14px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -5%, rgba(47,191,113,0.10), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 10%, rgba(203,161,53,0.07), transparent 60%);
+    pointer-events:none;
+    z-index:0;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;position:relative;z-index:1;}
+  h1,h2,h3,.display{font-family:'Cairo',sans-serif;}
+  .arabic{font-family:'Cairo',sans-serif;direction:rtl;unicode-bidi:isolate;}
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--green-soft);color:var(--text);}
+
+  /* NAV */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(10,12,10,0.82);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border-soft);
+  }
+  .nav-inner{
+    max-width:1180px;margin:0 auto;padding:18px 32px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Cairo',sans-serif;font-weight:800;font-size:20px;letter-spacing:0.2px;}
+  .logo-mark{
+    width:30px;height:30px;border-radius:8px;
+    background:linear-gradient(135deg,var(--green),var(--green-dim));
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Cairo',sans-serif;font-weight:900;color:#06130c;font-size:15px;
+  }
+  .nav-links{display:flex;gap:36px;font-size:14.5px;color:var(--text-muted);}
+  .nav-links a:hover{color:var(--text);}
+  .nav-cta{
+    background:var(--green);color:#06130c;font-weight:700;font-size:14px;
+    padding:10px 20px;border-radius:9px;transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(47,191,113,0.25);}
+  .nav-mobile-hide{display:flex;}
+  @media (max-width:820px){.nav-mobile-hide{display:none;}}
+
+  /* HERO */
+  .hero{padding:88px 0 60px;}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:64px;align-items:center;}
+  @media (max-width:960px){.hero-grid{grid-template-columns:1fr;gap:56px;}}
+
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:600;color:var(--gold);
+    background:var(--gold-soft);border:1px solid rgba(203,161,53,0.25);
+    padding:7px 14px;border-radius:100px;margin-bottom:24px;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
+
+  .hero h1{
+    font-size:52px;font-weight:800;line-height:1.12;letter-spacing:-1px;
+    margin-bottom:22px;
+  }
+  .hero h1 .hl{color:var(--green);}
+  @media (max-width:520px){.hero h1{font-size:36px;}}
+
+  .hero p.sub{font-size:18px;color:var(--text-muted);max-width:520px;margin-bottom:34px;}
+
+  .cta-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:28px;}
+  .btn-primary{
+    background:var(--green);color:#06130c;font-weight:700;font-size:15.5px;
+    padding:15px 26px;border-radius:10px;display:inline-flex;align-items:center;gap:8px;
+    transition:transform .15s ease, box-shadow .15s ease;border:none;cursor:pointer;
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(47,191,113,0.3);}
+  .btn-ghost{
+    color:var(--text);font-weight:600;font-size:15px;padding:15px 6px;
+    border-bottom:1px solid var(--border);display:inline-flex;align-items:center;gap:6px;
+  }
+  .btn-ghost:hover{border-color:var(--text-muted);}
+
+  .hero-note{font-size:13.5px;color:var(--text-dim);}
+  .hero-note b{color:var(--text-muted);}
+
+  /* DEMO CARD — signature element */
+  .demo-shell{
+    background:linear-gradient(180deg,var(--surface-1),var(--surface-2));
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 30px 80px -20px rgba(0,0,0,0.6);
+    position:relative;
+  }
+  .demo-shell::before{
+    content:"";position:absolute;inset:-1px;border-radius:20px;padding:1px;
+    background:linear-gradient(140deg, rgba(47,191,113,0.35), transparent 40%, rgba(203,161,53,0.25));
+    -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+  }
+  .demo-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .demo-title{font-size:12.5px;font-weight:700;color:var(--text-dim);letter-spacing:0.6px;text-transform:uppercase;}
+  .demo-live{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--green);font-weight:600;}
+  .demo-live .pulse{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+  .demo-card{
+    background:var(--surface-3);border:1px solid var(--border);border-radius:14px;
+    padding:18px;min-height:290px;display:flex;flex-direction:column;gap:14px;
+  }
+
+  .step{opacity:0;transform:translateY(6px);transition:opacity .5s ease, transform .5s ease;display:none;}
+  .step.active{opacity:1;transform:translateY(0);display:flex;flex-direction:column;gap:14px;}
+
+  .wa-bubble{
+    align-self:flex-start;max-width:88%;
+    background:#0f2a1c;border:1px solid rgba(47,191,113,0.25);
+    color:#d9f2e3;padding:10px 14px;border-radius:4px 14px 14px 14px;
+    font-size:14px;
+  }
+  .wa-label{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--green);margin-bottom:8px;font-weight:700;}
+
+  .review-block{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+  .review-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+  .review-name{font-size:13px;font-weight:600;color:var(--text-muted);}
+  .stars{color:var(--gold);font-size:13px;letter-spacing:2px;}
+  .review-text{font-size:16px;line-height:1.9;color:var(--text);}
+
+  .ai-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-dim);font-weight:600;}
+  .ai-row .chip{background:var(--gold-soft);color:var(--gold);padding:3px 9px;border-radius:100px;font-size:11px;}
+  .typing-dots{display:inline-flex;gap:3px;}
+  .typing-dots span{width:5px;height:5px;border-radius:50%;background:var(--text-dim);animation:bounce 1s infinite ease-in-out;}
+  .typing-dots span:nth-child(2){animation-delay:.15s;}
+  .typing-dots span:nth-child(3){animation-delay:.3s;}
+  @keyframes bounce{0%,80%,100%{transform:scale(0.6);opacity:.4;}40%{transform:scale(1);opacity:1;}}
+
+  .reply-block{background:var(--green-soft);border:1px solid rgba(47,191,113,0.3);border-radius:12px;padding:14px 16px;}
+  .reply-text{font-size:15px;line-height:1.9;color:#dff5e6;}
+  .published{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--green);font-weight:700;margin-top:2px;}
+
+  .demo-footer{display:flex;justify-content:center;gap:6px;margin-top:16px;}
+  .demo-footer .seg{width:22px;height:3px;border-radius:2px;background:var(--border);transition:background .3s;}
+  .demo-footer .seg.active{background:var(--green);}
+
+  @media(prefers-reduced-motion:reduce){
+    .step{transition:none;}
+    .pulse{animation:none;}
+  }
+
+  /* LOGO / TRUST STRIP */
+  .trust{padding:36px 0 70px;border-bottom:1px solid var(--border-soft);}
+  .trust-label{text-align:center;font-size:12.5px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:26px;}
+  .trust-row{display:flex;justify-content:center;gap:52px;flex-wrap:wrap;}
+  .trust-item{display:flex;align-items:center;gap:9px;color:var(--text-muted);font-size:15px;font-weight:600;}
+  .trust-item svg{width:19px;height:19px;stroke:var(--text-dim);}
+
+  /* SECTION HEADS */
+  .section{padding:100px 0;}
+  .section-head{max-width:640px;margin:0 auto 60px;text-align:center;}
+  .section-tag{font-size:13px;font-weight:700;color:var(--green);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;}
+  .section-head h2{font-size:36px;font-weight:800;letter-spacing:-0.5px;margin-bottom:16px;}
+  .section-head p{color:var(--text-muted);font-size:16.5px;}
+
+  /* PROBLEM */
+  .problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  @media(max-width:860px){.problem-grid{grid-template-columns:1fr;}}
+  .problem-card{
+    background:var(--surface-1);border:1px solid var(--border-soft);border-radius:var(--radius);
+    padding:28px 26px;
+  }
+  .problem-card .num{font-family:'Cairo',sans-serif;font-size:13px;font-weight:800;color:var(--text-dim);margin-bottom:14px;}
+  .problem-card h3{font-size:18px;font-weight:700;margin-bottom:10px;}
+  .problem-card p{color:var(--text-muted);font-size:14.5px;}
+
+  /* FEATURES */
+  .feature-row{
+    display:grid;grid-template-columns:0.85fr 1.15fr;gap:56px;align-items:center;
+    padding:56px 0;border-bottom:1px solid var(--border-soft);
+  }
+  .feature-row:last-child{border-bottom:none;}
+  .feature-row.reverse{grid-template-columns:1.15fr 0.85fr;}
+  .feature-row.reverse .feature-visual{order:2;}
+  @media(max-width:900px){
+    .feature-row,.feature-row.reverse{grid-template-columns:1fr;gap:28px;}
+    .feature-row.reverse .feature-visual{order:0;}
+  }
+
+  .feature-icon{
+    width:44px;height:44px;border-radius:12px;
+    background:var(--green-soft);border:1px solid rgba(47,191,113,0.25);
+    display:flex;align-items:center;justify-content:center;margin-bottom:20px;
+  }
+  .feature-icon svg{width:22px;height:22px;stroke:var(--green);}
+  .feature-text h3{font-size:24px;font-weight:800;margin-bottom:12px;letter-spacing:-0.3px;}
+  .feature-text p.lead{color:var(--text-muted);font-size:15.5px;margin-bottom:20px;}
+  .feature-list{list-style:none;display:flex;flex-direction:column;gap:12px;}
+  .feature-list li{
+    display:flex;gap:10px;font-size:14.5px;color:var(--text-muted);line-height:1.6;
+  }
+  .feature-list li b{color:var(--text);}
+  .feature-list svg{width:16px;height:16px;stroke:var(--gold);flex-shrink:0;margin-top:3px;}
+
+  .feature-visual{
+    background:var(--surface-1);border:1px solid var(--border-soft);border-radius:16px;
+    padding:24px;min-height:220px;display:flex;align-items:center;justify-content:center;
+  }
+  .fv-inbox{width:100%;display:flex;flex-direction:column;gap:10px;}
+  .fv-row{display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+  .fv-avatar{width:32px;height:32px;border-radius:50%;background:var(--surface-3);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--text-dim);}
+  .fv-meta{flex:1;min-width:0;}
+  .fv-meta .top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px;}
+  .fv-meta .top span:first-child{font-weight:600;color:var(--text);}
+  .fv-meta .top span:last-child{color:var(--text-dim);font-size:11.5px;}
+  .fv-meta .snip{font-size:12.5px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .fv-badge{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:100px;flex-shrink:0;}
+  .fv-badge.g{background:var(--green-soft);color:var(--green);}
+  .fv-badge.gold{background:var(--gold-soft);color:var(--gold);}
+
+  .fv-chart{width:100%;}
+  .fv-chart-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px;}
+  .fv-chart-head .big{font-family:'Cairo',sans-serif;font-size:30px;font-weight:800;color:var(--green);}
+  .fv-chart-head .lbl{font-size:12px;color:var(--text-dim);}
+  .fv-bars{display:flex;align-items:flex-end;gap:8px;height:110px;}
+  .fv-bars .bar{flex:1;background:linear-gradient(180deg,var(--green),var(--green-dim));border-radius:4px 4px 0 0;opacity:0.85;}
+
+  .fv-branches{display:flex;flex-direction:column;gap:10px;width:100%;}
+  .fv-branch{display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:13.5px;}
+  .fv-branch .name{font-weight:600;}
+  .fv-branch .rating{color:var(--gold);font-weight:700;font-size:13px;}
+
+  .fv-qr{display:flex;flex-direction:column;align-items:center;gap:14px;}
+  .fv-qr-box{width:120px;height:120px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;}
+  .fv-qr-box svg{width:70px;height:70px;stroke:var(--text-muted);}
+  .fv-qr-label{font-size:12.5px;color:var(--text-dim);text-align:center;}
+
+  /* HOW IT WORKS */
+  .flow{position:relative;}
+  .flow-line{
+    position:absolute;top:26px;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,var(--border) 8%,var(--border) 92%,transparent);
+    z-index:0;
+  }
+  @media(max-width:900px){.flow-line{display:none;}}
+  .flow-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;position:relative;z-index:1;}
+  @media(max-width:900px){.flow-steps{grid-template-columns:1fr 1fr;}}
+  @media(max-width:560px){.flow-steps{grid-template-columns:1fr;}}
+  .flow-step{display:flex;flex-direction:column;gap:14px;}
+  .flow-num{
+    width:52px;height:52px;border-radius:50%;background:var(--surface-1);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;font-family:'Cairo',sans-serif;font-weight:800;
+    color:var(--green);font-size:16px;
+  }
+  .flow-step h4{font-size:15.5px;font-weight:700;margin-bottom:4px;}
+  .flow-step p{font-size:13.5px;color:var(--text-muted);}
+
+  /* AGENCY BANNER */
+  .agency{
+    background:linear-gradient(135deg,var(--surface-1),var(--surface-2));
+    border:1px solid var(--border);border-radius:20px;
+    padding:52px;display:grid;grid-template-columns:1.2fr 0.8fr;gap:40px;align-items:center;
+  }
+  @media(max-width:820px){.agency{grid-template-columns:1fr;padding:36px 26px;}}
+  .agency h3{font-size:26px;font-weight:800;margin-bottom:14px;letter-spacing:-0.3px;}
+  .agency p{color:var(--text-muted);font-size:15px;margin-bottom:22px;max-width:460px;}
+  .agency-tags{display:flex;gap:10px;flex-wrap:wrap;}
+  .agency-tags span{
+    font-size:12.5px;font-weight:600;color:var(--text-muted);
+    border:1px solid var(--border);padding:6px 12px;border-radius:100px;
+  }
+  .agency-visual{
+    background:var(--surface-3);border:1px solid var(--border);border-radius:14px;padding:18px;
+  }
+
+  /* FINAL CTA / FORM */
+  .cta-section{padding:110px 0 100px;text-align:center;}
+  .cta-box{
+    max-width:620px;margin:0 auto;background:var(--surface-1);
+    border:1px solid var(--border);border-radius:22px;padding:56px 44px;position:relative;overflow:hidden;
+  }
+  .cta-box::before{
+    content:"";position:absolute;top:-60%;left:50%;transform:translateX(-50%);
+    width:500px;height:500px;background:radial-gradient(circle,rgba(47,191,113,0.14),transparent 65%);
+    pointer-events:none;
+  }
+  .cta-box h2{font-size:30px;font-weight:800;margin-bottom:12px;letter-spacing:-0.5px;position:relative;}
+  .cta-box p{color:var(--text-muted);font-size:15.5px;margin-bottom:30px;position:relative;max-width:460px;margin-left:auto;margin-right:auto;}
+  .form-row{display:flex;gap:10px;position:relative;flex-wrap:wrap;justify-content:center;}
+  .form-row input{
+    flex:1;min-width:220px;background:var(--surface-2);border:1px solid var(--border);
+    color:var(--text);padding:14px 16px;border-radius:10px;font-size:14.5px;font-family:'Inter',sans-serif;
+  }
+  .form-row input::placeholder{color:var(--text-dim);}
+  .form-row input:focus{outline:2px solid var(--green);outline-offset:1px;border-color:transparent;}
+  .form-row button{
+    background:var(--green);color:#06130c;font-weight:700;font-size:14.5px;
+    padding:14px 24px;border-radius:10px;border:none;cursor:pointer;white-space:nowrap;
+    transition:transform .15s ease;
+  }
+  .form-row button:hover{transform:translateY(-1px);}
+  .form-note{font-size:12.5px;color:var(--text-dim);margin-top:16px;position:relative;}
+  .form-success{display:none;color:var(--green);font-weight:600;font-size:14.5px;margin-top:6px;}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--border-soft);padding:42px 0;}
+  .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+  .footer-row .logo{font-size:16px;}
+  .footer-links{display:flex;gap:24px;font-size:13.5px;color:var(--text-dim);}
+  .footer-links a:hover{color:var(--text-muted);}
+
+  a:focus-visible, button:focus-visible, input:focus-visible{
+    outline:2px solid var(--green);outline-offset:2px;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo"><div class="logo-mark">س</div>Som3ah</div>
+    <div class="nav-links nav-mobile-hide">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#agency">For agencies</a>
+    </div>
+    <a href="#get-access" class="nav-cta">Get early access</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow"><span class="dot"></span> Built for the Egyptian market</div>
+      <h1>Turn every happy customer into a <span class="hl">5-star review</span> — automatically.</h1>
+      <p class="sub">Som3ah is the reputation platform built for Egyptian clinics, restaurants, and local services. Collect reviews over WhatsApp. Reply with AI that actually understands Egyptian Arabic.</p>
+      <div class="cta-row">
+        <a href="#get-access" class="btn-primary">Get early access →</a>
+        <a href="#how" class="btn-ghost">See how it works</a>
+      </div>
+      <p class="hero-note"><b>Currently in development.</b> We're validating demand before we build further — tell us if this is something your business would use.</p>
+    </div>
+
+    <div class="demo-shell">
+      <div class="demo-header">
+        <span class="demo-title">Live preview</span>
+        <span class="demo-live"><span class="pulse"></span>Amiya-Smart AI</span>
+      </div>
+      <div class="demo-card" id="demoCard">
+
+        <div class="step active" data-step="0">
+          <div class="wa-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            WhatsApp · sent 2h after visit
+          </div>
+          <div class="wa-bubble">مساء الخير! تشرفنا بزيارتك النهاردة 🌿 ممكن تقيّمنا في دقيقة واحدة؟</div>
+        </div>
+
+        <div class="step" data-step="1">
+          <div class="review-block">
+            <div class="review-top">
+              <span class="review-name">Nour A.</span>
+              <span class="stars">★★★★★</span>
+            </div>
+            <p class="review-text arabic">الدكتور محترم جدا والعيادة نضيفة، بس الانتظار كان طويل شوية</p>
+          </div>
+        </div>
+
+        <div class="step" data-step="2">
+          <div class="review-block">
+            <div class="review-top">
+              <span class="review-name">Nour A.</span>
+              <span class="stars">★★★★★</span>
+            </div>
+            <p class="review-text arabic">الدكتور محترم جدا والعيادة نضيفة، بس الانتظار كان طويل شوية</p>
+          </div>
+          <div class="ai-row">
+            <span class="chip">Amiya-Smart</span> drafting reply
+            <span class="typing-dots"><span></span><span></span><span></span></span>
+          </div>
+        </div>
+
+        <div class="step" data-step="3">
+          <div class="review-block">
+            <div class="review-top">
+              <span class="review-name">Nour A.</span>
+              <span class="stars">★★★★★</span>
+            </div>
+            <p class="review-text arabic">الدكتور محترم جدا والعيادة نضيفة، بس الانتظار كان طويل شوية</p>
+          </div>
+          <div class="reply-block">
+            <p class="reply-text arabic">شكرًا لتقييمك يا نور! سعداء إنك مبسوطة من الدكتور والعيادة، وهناخد ملاحظتك عن وقت الانتظار بجدية عشان نحسّنها 🙏</p>
+            <div class="published">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+              Published to Google Business Profile
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="demo-footer" id="demoDots"></div>
+    </div>
+  </div>
+</header>
+
+<div class="trust">
+  <div class="wrap">
+    <p class="trust-label">Built for the businesses Egyptians visit every day</p>
+    <div class="trust-row">
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 21h18M5 21V7l8-4 8 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg>Clinics & dental centers</div>
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>Restaurants & cafés</div>
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>Salons & barbershops</div>
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Real estate & agencies</div>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">The problem</div>
+      <h2>Reviews in Egypt don't happen by accident</h2>
+      <p>Your happiest customers walk out the door and say nothing online. Your one bad week gets a review within the hour.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="num">01</div>
+        <h3>Email & SMS get ignored</h3>
+        <p>Review request emails sit unread. Egyptian customers live on WhatsApp — everything else is background noise.</p>
+      </div>
+      <div class="problem-card">
+        <div class="num">02</div>
+        <h3>Replying takes real time</h3>
+        <p>Writing a thoughtful reply to every review — in the right tone, in Arabic — eats into a day that's already full.</p>
+      </div>
+      <div class="problem-card">
+        <div class="num">03</div>
+        <h3>Generic tools miss the dialect</h3>
+        <p>International review software reads Egyptian Arabic literally. It can't tell "عظمة جدا" from sarcasm — and neither can a template reply.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">What Som3ah does</div>
+      <h2>Five tools, one reputation engine</h2>
+      <p>Everything you need to collect, answer, and grow from customer reviews — without adding another app to your morning routine.</p>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-text">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+        <h3>WhatsApp-powered review generation</h3>
+        <p class="lead">We reach customers where they already spend their time — no email, no SMS, no app to download.</p>
+        <ul class="feature-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><b>Automated triggers</b> — connect your POS or booking system to send a review request a couple of hours after each visit.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><b>QR codes & NFC stands</b> — customers tap their phone at reception and land straight on your Google profile.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><b>Smart routing</b> — happy customers go public, concerns come to you privately first.</span></li>
+        </ul>
+      </div>
+      <div class="feature-visual">
+        <div class="fv-qr">
+          <div class="fv-qr-box"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM19 14h2v2h-2zM14 19h2v2h-2zM19 19h2v2h-2z"/></svg></div>
+          <p class="fv-qr-label">Reception desk QR / NFC stand<br>→ routes to Google Business Profile</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row reverse">
+      <div class="feature-text">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2a4 4 0 0 1 4 4v3a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4zM6 11v1a6 6 0 0 0 12 0v-1M12 18v4M8 22h8"/></svg></div>
+        <h3>"Amiya-Smart" AI auto-replies</h3>
+        <p class="lead">Trained on Egyptian Arabic — not just standard Arabic — so replies sound like they came from a person who gets it.</p>
+        <ul class="feature-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><b>Local context</b> — reads Egyptian slang correctly, telling a genuine compliment from a sarcastic complaint.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><b>One-click replies</b> — review the suggestion, tweak if you like, publish straight to Google or Facebook.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><b>Brand voice control</b> — formal for a clinic, casual for a café. Your call.</span></li>
+        </ul>
+      </div>
+      <div class="feature-visual">
+        <div class="fv-inbox">
+          <div class="fv-row">
+            <div class="fv-avatar">م</div>
+            <div class="fv-meta"><div class="top"><span>محمد س.</span><span>★★★★★</span></div><div class="snip">خدمة ممتازة والفريق متعاون جدا</div></div>
+            <span class="fv-badge g">Replied</span>
+          </div>
+          <div class="fv-row">
+            <div class="fv-avatar">ي</div>
+            <div class="fv-meta"><div class="top"><span>ياسمين ك.</span><span>★★★☆☆</span></div><div class="snip">الانتظار كان طويل شوية</div></div>
+            <span class="fv-badge gold">Draft ready</span>
+          </div>
+          <div class="fv-row">
+            <div class="fv-avatar">أ</div>
+            <div class="fv-meta"><div class="top"><span>أحمد ط.</span><span>★★★★★</span></div><div class="snip">عظمة جدا، هرجع تاني أكيد</div></div>
+            <span class="fv-badge g">Replied</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-text">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h3>The unified reputation inbox</h3>
+        <p class="lead">Every Google Maps and Facebook review in one feed — no more logging in and out of four apps a day.</p>
+        <ul class="feature-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><b>Centralized feed</b> — everything in a single dashboard, sorted by what needs you most.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><b>Real-time alerts</b> — know the moment a new review lands, before it becomes a bigger problem.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><b>Team assignment</b> — route reviews to the right manager, automatically.</span></li>
+        </ul>
+      </div>
+      <div class="feature-visual">
+        <div class="fv-inbox">
+          <div class="fv-row"><div class="fv-avatar">G</div><div class="fv-meta"><div class="top"><span>Google Maps</span><span>2m ago</span></div><div class="snip">New 5★ review from Sara M.</div></div></div>
+          <div class="fv-row"><div class="fv-avatar">f</div><div class="fv-meta"><div class="top"><span>Facebook</span><span>18m ago</span></div><div class="snip">New comment on your page post</div></div></div>
+          <div class="fv-row"><div class="fv-avatar">G</div><div class="fv-meta"><div class="top"><span>Google Maps</span><span>1h ago</span></div><div class="snip">New 3★ review — assigned to Omar</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row reverse">
+      <div class="feature-text">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 3v18h18M7 15l4-6 4 4 5-8"/></svg></div>
+        <h3>Growth & ROI dashboard</h3>
+        <p class="lead">See exactly how your reputation is turning into calls, clicks, and directions requests.</p>
+        <ul class="feature-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><b>Trend tracking</b> — average rating and review volume across 30, 60, or 90 days.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><b>Response-rate metrics</b> — see how fast your team is actually replying.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><b>Local SEO impact</b> — correlate your star rating with Maps calls, clicks, and directions.</span></li>
+        </ul>
+      </div>
+      <div class="feature-visual">
+        <div class="fv-chart">
+          <div class="fv-chart-head"><span class="big">4.8</span><span class="lbl">avg. rating · last 90 days</span></div>
+          <div class="fv-bars">
+            <div class="bar" style="height:35%"></div><div class="bar" style="height:48%"></div>
+            <div class="bar" style="height:42%"></div><div class="bar" style="height:60%"></div>
+            <div class="bar" style="height:55%"></div><div class="bar" style="height:78%"></div>
+            <div class="bar" style="height:70%"></div><div class="bar" style="height:92%"></div>
+            <div class="bar" style="height:85%"></div><div class="bar" style="height:100%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-text">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 21h18M5 21V7l8-4 8 4v14M9 9h1m4 0h1m-6 4h1m4 0h1"/></svg></div>
+        <h3>Multi-branch & agency ready</h3>
+        <p class="lead">Built to scale from two locations to two hundred — or to sit inside your agency's retainer.</p>
+        <ul class="feature-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><b>Branch comparisons</b> — see Nasr City against Sheikh Zayed at a glance.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><b>White-labeling</b> — agencies can put their own logo on the dashboard.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><b>Granular permissions</b> — branch managers see their branch, HQ sees everything.</span></li>
+        </ul>
+      </div>
+      <div class="feature-visual">
+        <div class="fv-branches">
+          <div class="fv-branch"><span class="name">Nasr City</span><span class="rating">★ 4.9</span></div>
+          <div class="fv-branch"><span class="name">Sheikh Zayed</span><span class="rating">★ 4.6</span></div>
+          <div class="fv-branch"><span class="name">Maadi</span><span class="rating">★ 4.8</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section" id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">How it works</div>
+      <h2>From visit to published reply, in five steps</h2>
+      <p>Once it's set up, the loop runs on its own.</p>
+    </div>
+    <div class="flow">
+      <div class="flow-line"></div>
+      <div class="flow-steps">
+        <div class="flow-step"><div class="flow-num">1</div><h4>Customer visits</h4><p>Your POS or booking system marks the visit as complete.</p></div>
+        <div class="flow-step"><div class="flow-num">2</div><h4>WhatsApp goes out</h4><p>A short, polite review request is sent automatically, a couple of hours later.</p></div>
+        <div class="flow-step"><div class="flow-num">3</div><h4>Review lands</h4><p>It posts to Google or Facebook and appears instantly in your inbox.</p></div>
+        <div class="flow-step"><div class="flow-num">4</div><h4>AI drafts a reply</h4><p>Amiya-Smart writes a reply that matches your brand voice and the review's tone.</p></div>
+        <div class="flow-step"><div class="flow-num">5</div><h4>You publish</h4><p>Approve as-is or tweak it, then send — right from the dashboard.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="agency">
+  <div class="wrap">
+    <div class="agency">
+      <div>
+        <h3>Built for agencies, not just single locations</h3>
+        <p>Digital marketing agencies can white-label Som3ah, bundle it into monthly retainers, and give every client a reputation dashboard worth showing off — without building any of it themselves.</p>
+        <div class="agency-tags">
+          <span>White-label dashboard</span>
+          <span>Multi-client management</span>
+          <span>Branch-level permissions</span>
+          <span>Retainer-ready pricing</span>
+        </div>
+      </div>
+      <div class="agency-visual">
+        <div class="fv-branches">
+          <div class="fv-branch"><span class="name">Client — El Nour Clinic</span><span class="rating">★ 4.9</span></div>
+          <div class="fv-branch"><span class="name">Client — Bosta Café</span><span class="rating">★ 4.7</span></div>
+          <div class="fv-branch"><span class="name">Client — Zahra Real Estate</span><span class="rating">★ 4.8</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="get-access">
+  <div class="wrap">
+    <div class="cta-box">
+      <h2>We're validating Som3ah before we build further</h2>
+      <p>Leave your email and what kind of business you run. No spam, no commitment — just early access if this becomes real, and a chance to shape what we build.</p>
+      <form id="interestForm">
+        <div class="form-row">
+          <input type="email" id="emailInput" placeholder="you@business.com" required>
+          <button type="submit">Notify me</button>
+        </div>
+      </form>
+      <p class="form-success" id="formSuccess">Thanks — you're on the list. We'll be in touch.</p>
+      <p class="form-note">This page is for gathering feedback only — no account is created and no charge is made.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <div class="logo"><div class="logo-mark">س</div>Som3ah</div>
+    <div class="footer-links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#agency">For agencies</a>
+    </div>
+    <div class="footer-links"><span>© 2026 Som3ah. Made in Egypt.</span></div>
+  </div>
+</footer>
+
+<script>
+  // Hero demo animation
+  const steps = document.querySelectorAll('#demoCard .step');
+  const dotsWrap = document.getElementById('demoDots');
+  steps.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'seg' + (i === 0 ? ' active' : '');
+    dotsWrap.appendChild(d);
+  });
+  const dots = dotsWrap.querySelectorAll('.seg');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduceMotion) {
+    let current = 0;
+    setInterval(() => {
+      steps[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = (current + 1) % steps.length;
+      steps[current].classList.add('active');
+      dots[current].classList.add('active');
+    }, 2600);
+  } else {
+    steps.forEach((s, i) => { if (i !== steps.length - 1) s.classList.remove('active'); });
+    steps[steps.length - 1].classList.add('active');
+    dots[dots.length - 1].classList.add('active');
+  }
+
+  // Feedback form (front-end only — no backend on this preview page)
+  const form = document.getElementById('interestForm');
+  const success = document.getElementById('formSuccess');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    success.style.display = 'block';
+    form.style.opacity = '0.5';
+    form.style.pointerEvents = 'none';
+  });
+</script>
+
+</body>
+</html>
